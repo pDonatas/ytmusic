@@ -9,13 +9,15 @@ require('./bootstrap');
 window.Vue = require('vue');
 import Vue from "vue";
 import VueRouter from "vue-router"
+import VueYoutube from 'vue-youtube'
 
 Vue.use(VueRouter)
-
+Vue.use(VueYoutube)
 import App from './components/App'
+import Home from './components/Home'
 
 const routes = [
-    { path: '/', component: App },
+    { path: '/', component: Home },
 ]
 
 // 3. Create the router instance and pass the `routes` option

@@ -14,5 +14,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Auth::routes();
-
+Route::prefix('api')->group(function() {
+    Route::resource('channels', 'ChannelController');
+    Route::patch('channels/updateYoutube/{id}', 'ChannelController@updateYoutube');
+});
 Route::any( '{any}', 'AppController@index')->where('any', '.*');
