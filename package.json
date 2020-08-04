@@ -25,6 +25,7 @@
     },
     "dependencies": {
         "vue-router": "^3.3.4",
+        "vue-simple-spinner": "^1.2.10",
         "vue-youtube": "^1.4.0"
     }
 }

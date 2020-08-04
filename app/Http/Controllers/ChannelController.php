@@ -27,7 +27,7 @@ class ChannelController extends Controller
     public function store(Request $request)
     {
         $name = $request->request->get('name');
-        if($name == null) return new Response(json_encode(['error' => 'Name is empty']));
+        if($name == null) return response(['error' => 'Name is not set'], 500);
         $dj = Auth::id(); // Assume that user who creates a channel is DJ
         $channel = new Channel();
         $channel->dj = $dj;
@@ -66,10 +66,12 @@ class ChannelController extends Controller
     public function updateYoutube(Request $request, $id)
     {
         $channel = Channel::findOrFail($id);
-        $youtube = $request->request->get('youtube-id');
+        $youtube = $request->request->get('youtubeId');
         $time = $request->request->get('time');
-        if($youtube == null) return new Response(json_encode(['error' => 'Youtube id is not set']));
-        elseif($time == null) return new Response(json_encode(['error' => 'Time is not set']));
+        if($youtube == null)
+            return response(['error' => 'Youtube id is not set'], 500);
+        elseif($time == null)
+            return response(['error' => 'Time is not set'], 500);
         $channel->youtubeId = $youtube;
         $channel->time = $time;
         $channel->save();

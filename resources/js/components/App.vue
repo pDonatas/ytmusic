@@ -21,6 +21,7 @@
 </template>
 
 <script>
+    import axios from 'axios'
     export default {
         created() {
             this.$router.options.routes.forEach(route => {
@@ -29,10 +30,13 @@
                     , path: route.path
                 })
             })
-        }
-        , data() {
+        },
+        data() {
             return {
-                items: []
+                items: [],
+                req: axios.create({
+                    baseUrl: '/',
+                })
             }
         }
     }

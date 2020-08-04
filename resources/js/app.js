@@ -15,16 +15,19 @@ Vue.use(VueRouter)
 Vue.use(VueYoutube)
 import App from './components/App'
 import Home from './components/Home'
+import Channel from './components/Channel'
 
 const routes = [
     { path: '/', component: Home },
+    { path: '/channel/:id', component: Channel }
 ]
 
 // 3. Create the router instance and pass the `routes` option
 // You can pass in additional options here, but let's
 // keep it simple for now.
 const router = new VueRouter({
-    routes // short for `routes: routes`
+    routes,
+    mode: 'history'
 })
 
 /**
@@ -32,6 +35,7 @@ const router = new VueRouter({
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+Vue.component('spinner', require('vue-simple-spinner'));
 
 const app = new Vue({
     el: '#app',

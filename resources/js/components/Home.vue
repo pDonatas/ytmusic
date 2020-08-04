@@ -1,17 +1,17 @@
 <template>
-    <div class="col-md-9">
+    <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                Current song: Take on me by A-ha
+                Channels
             </div>
             <div class="card-body">
-                <youtube :video-id="videoId" :player-vars="playerVars" ref="youtube"></youtube>
-                <div v-if="this.playing === false">
-                    <button class="btn btn-play" @click="playVideo">Play</button>
-                </div>
-                <div v-else>
-                    <button class="btn btn-play" @click="pauseVideo">Pause</button>
-                </div>
+                <ul class="list-group">
+                    <li class="list-group-item" v-for="channel in channels" v-bind:key="channel.id">
+                        Channel: {{channel.name}}<br/>
+                        Current song: {{channel.youtubeId}}<br/>
+                        <a :href="'/channel/' + channel.id">Enter</a>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
@@ -22,69 +22,20 @@
         name: "Home",
         data() {
             return {
-                videoId: 'dQw4w9WgXcQ',
-                playerVars: {
-                    showinfo: 0,
-                    controls: 0,
-                    autohide: 1,
-                    wmode: 'transparent',
-                    modestbranding: 1,
-                    showsearch: 0,
-                    playsinline: 1,
-                    color: 'white',
-                    rel: 0,
-                    version: 3,
-                    theme: 'light'
-                },
-                playing: false,
-                currentTime: 0,
-                timer: null,
+                channels: []
             }
         },
         mounted() {
-            this.player.addEventListener('onStateChange', this.youtubStateChange)
+            this.LoadChannels()
         },
         methods: {
-            playVideo() {
-                this.player.seekTo(this.currentTime);
-                this.player.playVideo()
-                this.playing = true
-                var self = this;
-                this.timer = setInterval(async function(){
-                    if(self.playing === true) {
-                        self.currentTime = await self.player.getCurrentTime();
-                    }
-                }, 1000);
-            },
-            pauseVideo() {
-                this.player.pauseVideo()
-                this.playing = false
-                clearInterval(this.timer);
-                this.timer = null;
-            },
-            youtubStateChange (youtubeState) {
-                switch(youtubeState.data) {
-                    case 1:
-                        if(!this.playing)
-                            this.playVideo();
-                        break;
-                    case 2:
-                        if(this.playing)
-                            this.pauseVideo();
-                        break;
-                    case 0:
-                        clearInterval(this.timer);
-                        this.timer = null;
-                        this.currentTime = 0;
-                        console.log(this.currentTime);
-                        this.playing = false;
-                        break;
-                }
-            }
-        },
-        computed: {
-            player() {
-                return this.$refs.youtube.player
+            LoadChannels() {
+                this.$parent.req.get('api/channels').then(response => {
+                    console.log(response.data);
+                    this.channels = response.data;
+                }).catch(error => {
+                    console.error(error.response.data.error);
+                });
             }
         }
     }
