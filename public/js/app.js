@@ -2146,10 +2146,31 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Home",
   data: function data() {
     return {
+      channel: {
+        title: ''
+      },
+      alert: {
+        "class": '',
+        'content': ''
+      },
       channels: []
     };
   },
@@ -2161,10 +2182,35 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.$parent.req.get('api/channels').then(function (response) {
-        console.log(response.data);
         _this.channels = response.data;
       })["catch"](function (error) {
         console.error(error.response.data.error);
+      });
+    },
+    creationForm: function creationForm() {
+      document.getElementById('creation').style.display = 'block';
+      document.getElementById('creationButton').style.display = 'none';
+    },
+    submitForm: function submitForm() {
+      var _this2 = this;
+
+      var info = {
+        name: this.channel.title
+      };
+      this.$parent.req.post('api/channels', info).then(function (response) {
+        var div = document.getElementById('alerts');
+
+        if (response.data.success) {
+          _this2.alert["class"] = 'alert alert-success';
+          _this2.alert.content = response.data.success;
+        } else {
+          _this2.alert["class"] = 'alert alert-danger';
+          _this2.alert.content = response.data.error;
+        }
+
+        _this2.LoadChannels();
+      })["catch"](function (error) {
+        console.error(error);
       });
     }
   }
@@ -38982,31 +39028,110 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "card-body" }, [
+        _vm.alert
+          ? _c("div", [
+              _c("div", { class: _vm.alert.class }, [
+                _vm._v(_vm._s(_vm.alert.content))
+              ])
+            ])
+          : _vm._e(),
+        _vm._v(" "),
         _c(
           "ul",
           { staticClass: "list-group" },
-          _vm._l(_vm.channels, function(channel) {
-            return _c(
-              "li",
-              { key: channel.id, staticClass: "list-group-item" },
+          [
+            _vm.channels.length === 0
+              ? _c("div", [_vm._v("There are no channels yet.")])
+              : _vm._l(_vm.channels, function(channel) {
+                  return _c(
+                    "li",
+                    { key: channel.id, staticClass: "list-group-item" },
+                    [
+                      _vm._v(
+                        "\n                    Channel: " + _vm._s(channel.name)
+                      ),
+                      _c("br"),
+                      _vm._v(
+                        "\n                    Current song: " +
+                          _vm._s(channel.youtubeId)
+                      ),
+                      _c("br"),
+                      _vm._v(" "),
+                      _c("a", { attrs: { href: "/channel/" + channel.id } }, [
+                        _vm._v("Enter")
+                      ])
+                    ]
+                  )
+                }),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-primary form-control",
+                attrs: { id: "creationButton" },
+                on: {
+                  click: function($event) {
+                    return _vm.creationForm()
+                  }
+                }
+              },
+              [_vm._v("Create channel")]
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticStyle: { display: "none" }, attrs: { id: "creation" } },
               [
-                _vm._v(
-                  "\n                    Channel: " + _vm._s(channel.name)
-                ),
-                _c("br"),
-                _vm._v(
-                  "\n                    Current song: " +
-                    _vm._s(channel.youtubeId)
-                ),
-                _c("br"),
-                _vm._v(" "),
-                _c("a", { attrs: { href: "/channel/" + channel.id } }, [
-                  _vm._v("Enter")
-                ])
+                _c(
+                  "form",
+                  {
+                    attrs: { method: "post" },
+                    on: {
+                      submit: function($event) {
+                        $event.preventDefault()
+                        return _vm.submitForm()
+                      }
+                    }
+                  },
+                  [
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "title" } }, [
+                        _vm._v("Channel title")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.channel.title,
+                            expression: "channel.title"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { id: "title", type: "text" },
+                        domProps: { value: _vm.channel.title },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.channel, "title", $event.target.value)
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("input", {
+                      staticClass: "form-control btn btn-primary",
+                      attrs: { type: "submit", value: "Create" }
+                    })
+                  ]
+                )
               ]
             )
-          }),
-          0
+          ],
+          2
         )
       ])
     ])
@@ -56392,8 +56517,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! D:\wamp64\www\ytmusic\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! D:\wamp64\www\ytmusic\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\wamp64\www\ytmusic\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\wamp64\www\ytmusic\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
